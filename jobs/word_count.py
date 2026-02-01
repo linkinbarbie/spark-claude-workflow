@@ -35,3 +35,18 @@ def word_count(spark: SparkSession, text_data: list[str]) -> dict[str, int]:
 def filter_by_min_count(word_counts: dict[str, int], min_count: int) -> dict[str, int]:
     """Filter words that appear at least min_count times."""
     return {word: count for word, count in word_counts.items() if count >= min_count}
+
+
+def top_n_words(word_counts: dict[str, int], n: int) -> list[tuple[str, int]]:
+    """
+    Get the top N most frequent words.
+
+    Args:
+        word_counts: Dictionary mapping words to their counts
+        n: Number of top words to return
+
+    Returns:
+        List of (word, count) tuples sorted by count descending
+    """
+    sorted_words = sorted(word_counts.items(), key=lambda x: x[1], reverse=True)
+    return sorted_words[:n]

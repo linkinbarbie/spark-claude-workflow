@@ -1,7 +1,7 @@
 """Tests for the word count Spark job."""
 
 import pytest
-from jobs.word_count import word_count, filter_by_min_count
+from jobs.word_count import word_count, filter_by_min_count, top_n_words
 
 
 class TestWordCount:
@@ -67,3 +67,29 @@ class TestFilterByMinCount:
         result = filter_by_min_count(word_counts, 1)
 
         assert result == {"hello": 5, "world": 5}
+
+
+class TestTopNWords:
+    """Tests for top_n_words function."""
+
+    def test_top_n_basic(self):
+        """Test getting top N words."""
+        word_counts = {"hello": 10, "world": 5, "spark": 8, "python": 3}
+
+        result = top_n_words(word_counts, 2)
+
+        assert result == [("hello", 10), ("spark", 8)]
+
+    def test_top_n_exceeds_total(self):
+        """Test when N exceeds total number of words."""
+        word_counts = {"hello": 5, "world": 3}
+
+        result = top_n_words(word_counts, 10)
+
+        assert len(result) == 2
+
+    def test_top_n_empty(self):
+        """Test with empty input."""
+        result = top_n_words({}, 5)
+
+        assert result == []
