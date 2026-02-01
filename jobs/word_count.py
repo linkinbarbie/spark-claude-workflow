@@ -20,6 +20,9 @@ def word_count(spark: SparkSession, text_data: list[str]) -> dict[str, int]:
     Returns:
         Dictionary mapping words to their counts
     """
+    if not text_data:
+        return {}
+
     df = spark.createDataFrame([(line,) for line in text_data], ["line"])
 
     words_df = (
